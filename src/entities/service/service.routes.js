@@ -1,6 +1,7 @@
 import express from 'express'
 import { adminMiddleware, verifyToken } from '../../core/middlewares/authMiddleware.js'
 import { listServices, getServiceById, createService, updateService, deleteService } from './service.controller.js'
+import { multerUpload } from '../../core/middlewares/multer.js';
 
 const router = express.Router()
 
@@ -8,10 +9,11 @@ const router = express.Router()
 router.get('/', listServices)
 router.get('/:id', getServiceById)
 
+// router.use(verifyToken,adminMiddleware)
 // Admin
-router.post('/', verifyToken, adminMiddleware, createService)
-router.patch('/:id', verifyToken, adminMiddleware, updateService)
-router.delete('/:id', verifyToken, adminMiddleware, deleteService)
+router.post('/', createService)
+router.patch('/:id',multerUpload([{ name: 'thumbnail', maxCount: 1 }]),  updateService)
+router.delete('/:id', deleteService)
 
 export default router
 

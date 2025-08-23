@@ -6,6 +6,7 @@ import {
   updateServiceService,
   deleteServiceService
 } from './service.service.js'
+import { cloudinaryUpload } from '../../lib/cloudinaryUpload.js'
 
 export const listServices = async (req, res, next) => {
   try {
@@ -31,6 +32,24 @@ export const createService = async (req, res, next) => {
 
 export const updateService = async (req, res, next) => {
   try {
+    if (
+      req.files &&
+      req.files.thumbnail &&
+      req.files.thumbnail[0] &&
+      req.files.thumbnail[0].path
+    ) {
+      const filePath = req.files.thumbnail[0].path
+      const upload = await cloudinaryUpload(
+        filePath,
+        `service-${req.params.id}-${Date.now()}`,
+        'services'
+      )
+
+      if (upload && (upload.secure_url || upload.url)) {
+        req.body.imageUrl = upload.secure_url || upload.url
+      }
+    }
+
     const data = await updateServiceService(req.params.id, req.body)
     generateResponse(res, 200, true, 'Service updated', data)
   } catch (err) { next(err) }

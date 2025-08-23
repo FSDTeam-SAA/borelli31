@@ -3,9 +3,9 @@ import ServiceCategory from '../../lib/serviceTypes.js';
 import Service from '../service/service.model.js';
 
 const AssessmentStatus = Object.freeze({
-  PENDING: 'Pending',
-  IN_PROGRESS: 'In Progress',
-  COMPLETED: 'Completed'
+  PENDING: 'PENDING',
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED'
 });
 
 const AssessmentSchema = new mongoose.Schema(
@@ -26,18 +26,24 @@ const AssessmentSchema = new mongoose.Schema(
 
     status: {
       type: String,
-      enum: [AssessmentStatus.PENDING, AssessmentStatus.IN_PROGRESS, AssessmentStatus.COMPLETED],
-      default: AssessmentStatus.PENDING
+      enum: ["PENDING", "IN_PROGRESS", "COMPLETED"],
+      default: "PENDING"
     }
   },
   { timestamps: true }
 );
 
-// Generate a human-friendly inquiry id if not present
+
 AssessmentSchema.pre('save', function (next) {
   if (!this.inquiryId) {
     const random = Math.floor(100000 + Math.random() * 900000);
-    this.inquiryId = `QU-${random}`;
+    const existing = mongoose.models.Assessment.findOne({ inquiryId: `QU-${random}` });
+    if (existing) {
+        const uniqueRandom = Math.floor(100000 + Math.random() * 900000);
+      this.inquiryId = `QU-${uniqueRandom}`;
+    } else {
+      this.inquiryId = `QU-${random}`;
+    }
   }
   next();
 });

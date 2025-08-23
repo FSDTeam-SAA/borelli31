@@ -1,5 +1,6 @@
 import { generateResponse } from '../../lib/responseFormate.js'
 import { createMessageService, listMessagesService, getMessageByIdService, deleteMessageService } from './message.service.js'
+import { generateMessagePdf } from '../../lib/pdf.js'
 
 export const createMessage = async (req, res, next) => {
   try {
@@ -27,6 +28,14 @@ export const deleteMessage = async (req, res, next) => {
   try {
     const data = await deleteMessageService(req.params.id)
     generateResponse(res, 200, true, 'Message deleted', data)
+  } catch (err) { next(err) }
+}
+
+export const downloadMessage = async (req, res, next) => {
+  try {
+    const doc = await getMessageByIdService(req.params.id)
+    if (!doc) return generateResponse(res, 404, false, 'Message not found', null)
+    generateMessagePdf(doc, res)
   } catch (err) { next(err) }
 }
 
