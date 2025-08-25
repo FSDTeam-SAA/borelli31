@@ -8,7 +8,7 @@ const router = express.Router()
 // Public
 router.post('/', createAssessment)
 
-// router.use(verifyToken, adminMiddleware)
+ router.use(verifyToken, adminMiddleware)
 // Admin
 router.get('/stats', assessmentStats)
 router.get('/stats/timeline', assessmentTimelineStats) 

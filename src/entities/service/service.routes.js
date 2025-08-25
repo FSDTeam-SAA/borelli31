@@ -9,10 +9,10 @@ const router = express.Router()
 router.get('/', listServices)
 router.get('/:id', getServiceById)
 
-// router.use(verifyToken,adminMiddleware)
+router.use(verifyToken, adminMiddleware)
 // Admin
 router.post('/', createService)
-router.patch('/:id',multerUpload([{ name: 'thumbnail', maxCount: 1 }]),  updateService)
+router.patch('/:id', multerUpload([{ name: 'thumbnail', maxCount: 1 }]), updateService)
 router.delete('/:id', deleteService)
 
 export default router
