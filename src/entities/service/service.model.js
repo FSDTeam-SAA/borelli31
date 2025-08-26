@@ -11,7 +11,7 @@ const ServiceSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, 'Service category is required.'],
-      enum: [ServiceCategory.COMMERCIAL, ServiceCategory.RESIDENTIAL]
+      enum: [ServiceCategory.COMMERCIAL, ServiceCategory.RESIDENTIAL, ServiceCategory.OFFER]
     },
     description: {
       type: String,

@@ -1,6 +1,7 @@
 export const ServiceCategory = Object.freeze({
   COMMERCIAL: 'Commercial',
-  RESIDENTIAL: 'Residential'
+  RESIDENTIAL: 'Residential',
+  OFFER: 'Offer'
 });
 
 export const COMMERCIAL_SERVICES = Object.freeze([
@@ -20,9 +21,15 @@ export const RESIDENTIAL_SERVICES = Object.freeze([
   'Gutter Services'
 ]);
 
+export const OFFER_SERVICES = Object.freeze([
+  'Free Drone Inspections',
+  'Sale-Ready Certifications'
+]);
+
 export const ALL_SERVICES = Object.freeze([
   ...COMMERCIAL_SERVICES,
-  ...RESIDENTIAL_SERVICES
+  ...RESIDENTIAL_SERVICES,
+  ...OFFER_SERVICES
 ]);
 
 export default ServiceCategory;

@@ -1,22 +1,24 @@
 import Assessment from './assessment.model.js'
 import Service from '../service/service.model.js'
 import { createPaginationInfo } from '../../lib/pagination.js'
+import sendEmail from '../../lib/sendEmail.js'
+import { adminMail } from '../../core/config/config.js'
+
 
 export const createAssessmentService = async (payload) => {
-  const { service: serviceId, fullName, email, phone, propertyAddress } = payload
-  if (!serviceId) {
-    throw new Error('Service id is required')
-  }
+  const { service: serviceId, fullName, email, phone, propertyAddress } = payload;
+  if (!serviceId) throw new Error("Service id is required");
 
-  const serviceDoc = await Service.findById(serviceId)
-  if (!serviceDoc) {
-    throw new Error('Service not found')
-  }
+  const serviceDoc = await Service.findById(serviceId);
+  if (!serviceDoc) throw new Error("Service not found");
 
-  // If same user (by email) requests assessment for same service, return latest existing
-  const existing = await Assessment.findOne({ email, service: serviceDoc._id }).sort({ createdAt: -1 })
+  const existing = await Assessment.findOne({
+    email,
+    service: serviceDoc._id,
+  }).sort({ createdAt: -1 });
+
   if (existing) {
-    return { doc: existing, existed: true }
+    return { doc: existing, existed: true };
   }
 
   const doc = await Assessment.create({
@@ -25,15 +27,81 @@ export const createAssessmentService = async (payload) => {
     phone,
     propertyAddress,
     service: serviceDoc._id,
-    category: serviceDoc.category
-  })
-  return { doc, existed: false }
-}
+    category: serviceDoc.category,
+  });
+
+  // --- Send email to admin ---
+  const subject = `📋 New Assessment Inquiry from ${fullName}`;
+  const html = `
+    <div style="font-family: Arial, sans-serif; background-color:#f9f9f9; padding:20px;">
+      <div style="max-width:600px; margin:0 auto; background:#ffffff; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1); overflow:hidden;">
+        
+        <!-- Header -->
+        <div style="background:#007bff; color:#ffffff; padding:16px; text-align:center;">
+          <h2 style="margin:0; font-size:22px;">New Assessment Submitted</h2>
+        </div>
+        
+        <!-- Body -->
+        <div style="padding:20px; color:#333333;">
+          <p style="font-size:16px;">Hello Admin,</p>
+          <p style="font-size:15px;">A new assessment inquiry has been submitted. Here are the details:</p>
+          
+          <table style="width:100%; border-collapse:collapse; margin-top:15px;">
+            <tr>
+              <td style="padding:8px; border:1px solid #ddd; background:#f4f7fc;"><b>Service</b></td>
+              <td style="padding:8px; border:1px solid #ddd;">${serviceDoc.name}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #ddd; background:#f4f7fc;"><b>Name</b></td>
+              <td style="padding:8px; border:1px solid #ddd;">${fullName}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #ddd; background:#f4f7fc;"><b>Email</b></td>
+              <td style="padding:8px; border:1px solid #ddd;">${email}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #ddd; background:#f4f7fc;"><b>Phone</b></td>
+              <td style="padding:8px; border:1px solid #ddd;">${phone}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #ddd; background:#f4f7fc;"><b>Property Address</b></td>
+              <td style="padding:8px; border:1px solid #ddd;">${propertyAddress}</td>
+            </tr>
+            <tr>
+              <td style="padding:8px; border:1px solid #ddd; background:#f4f7fc;"><b>Category</b></td>
+              <td style="padding:8px; border:1px solid #ddd;">${serviceDoc.category}</td>
+            </tr>
+          </table>
+
+          <p style="font-size:14px; margin-top:20px;">Please log in to the admin panel for more details.</p>
+        </div>
+        
+        <!-- Footer -->
+        <div style="background:#f1f1f1; text-align:center; padding:12px; font-size:12px; color:#777;">
+          <p style="margin:0;">This is an automated notification from <b>Borelli31</b>.</p>
+        </div>
+      </div>
+    </div>
+  `;
+
+
+  try {
+    console.log("Sending email to admin:", adminMail);
+    const result = await sendEmail({ to: adminMail, subject, html });
+    console.log("Email send status:", result);
+  } catch (err) {
+    console.error("Failed to send admin notification email:", err.message);
+  }
+
+  return { doc, existed: false };
+};
+
 
 export const getAssessmentByIdService = async (id) => {
   const doc = await Assessment.findById(id).populate('service')
   return doc
-}
+};
+
 
 export const listAssessmentsService = async ({ page = 1, limit = 25, status, category, search }) => {
   page = Number(page); limit = Number(limit)
@@ -54,6 +122,7 @@ export const listAssessmentsService = async ({ page = 1, limit = 25, status, cat
   return { items, meta: createPaginationInfo(page, limit, total) }
 }
 
+
 export const updateAssessmentStatusService = async (id, status) => {
   const ALLOWED_STATUSES = ['PENDING', 'IN_PROGRESS', 'COMPLETED']
   if (!ALLOWED_STATUSES.includes(status)) {
@@ -70,6 +139,7 @@ export const updateAssessmentStatusService = async (id, status) => {
   return doc
 }
 
+
 export const assessmentStatsService = async () => {
   const [total, pending, inProgress, completed] = await Promise.all([
     Assessment.countDocuments({}),
@@ -79,9 +149,6 @@ export const assessmentStatsService = async () => {
   ])
   return { total, pending, inProgress, completed }
 }
-
-
-
 
 
 //statistic timeline
