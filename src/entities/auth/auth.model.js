@@ -5,9 +5,6 @@ import bcrypt from 'bcrypt';
 import { accessTokenExpires, accessTokenSecrete, refreshTokenExpires, refreshTokenSecrete } from '../../core/config/config.js';
 
 
-
-
-
 const UserSchema = new mongoose.Schema(
   {
     name: { type: String, required: true },
