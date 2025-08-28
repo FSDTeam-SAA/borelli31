@@ -14,7 +14,8 @@ const UserSchema = new mongoose.Schema(
     dob: { type: Date, default: null },
     gender: {
       type: String,
-      enum: ['male', 'female', 'other'], 
+      enum: ['male', 'female', 'other'],
+      default: 'male'
     },
 
     role: {
@@ -27,7 +28,7 @@ const UserSchema = new mongoose.Schema(
 
     bio: { type: String, default: '' },
     address: { type: String, default: '' },
-
+    phone: { type: String, default: '' },
     profileImage: { type: String, default: '' },
     multiProfileImage: { type: [String], default: [] },
     pdfFile: { type: String, default: '' },
