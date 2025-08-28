@@ -49,7 +49,12 @@ app.use(globalLimiter);
 // Set up static files middleware
 const uploadPath = path.resolve(__dirname, "../uploads");
 app.use("/uploads", express.static(uploadPath));
-
+// Set up a welcome route
+app.get('/', (req, res) => {
+    res.json({
+        message: 'Welcome to Borelli API'
+    });
+});
 // Set up API routes
 app.use('/api', appRouter);
 
