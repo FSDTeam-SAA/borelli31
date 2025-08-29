@@ -1,5 +1,5 @@
+import { cloudinaryUpload } from '../../lib/cloudinaryUpload.js'
 import Service from './service.model.js'
-import { createPaginationInfo } from '../../lib/pagination.js'
 
 export const listServicesService = async ({ category }) => {
   const filter = {}
@@ -13,7 +13,15 @@ export const getServiceByIdService = async (id) => {
   return service
 }
 
-export const createServiceService = async (payload) => {
+export const createServiceService = async (payload, thumbnail) => {
+
+  if (thumbnail) {
+    const upload = await cloudinaryUpload(thumbnail[0].path, `service-${Date.now()}`, 'services')
+    if (upload && (upload.secure_url || upload.url)) {
+      payload.imageUrl = upload.secure_url || upload.url
+    }
+  }
+
   const service = await Service.create(payload)
   return service
 }

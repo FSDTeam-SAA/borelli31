@@ -75,6 +75,7 @@ router.put(
   multerUpload([{ name: 'multiProfileImage', maxCount: 5 }]),
   updateMultipleAvatarController
 );
+
 router.delete(
   '/upload-multiple-avatar/:id',
   verifyToken,
@@ -88,6 +89,7 @@ router.post(
   multerUpload([{ name: 'userPDF', maxCount: 1 }]),
   createUserPDFController
 );
+
 router.put(
   '/upload-file/:id',
   verifyToken,
