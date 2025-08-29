@@ -11,7 +11,7 @@ router.get('/:id', getServiceById)
 
 router.use(verifyToken, adminMiddleware)
 // Admin
-router.post('/', createService)
+router.post('/', multerUpload([{ name: 'thumbnail', maxCount: 1 }]), createService)
 router.patch('/:id', multerUpload([{ name: 'thumbnail', maxCount: 1 }]), updateService)
 router.delete('/:id', deleteService)
 

@@ -25,7 +25,8 @@ export const getServiceById = async (req, res, next) => {
 
 export const createService = async (req, res, next) => {
   try {
-    const data = await createServiceService(req.body)
+    const { thumbnail } = req.files
+    const data = await createServiceService(req.body, thumbnail)
     generateResponse(res, 201, true, 'Service created', data)
   } catch (err) { next(err) }
 }
