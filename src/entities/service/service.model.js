@@ -19,6 +19,10 @@ const ServiceSchema = new mongoose.Schema(
     imageUrl: {
       type: String,
       default: ''
+    },
+    btnText: {
+      type: String,
+      default: ''
     }
   },
   { timestamps: true }
