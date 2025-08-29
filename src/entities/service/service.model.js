@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import ServiceCategory from '../../lib/serviceTypes.js';
 
 const ServiceSchema = new mongoose.Schema(
   {
@@ -11,7 +10,6 @@ const ServiceSchema = new mongoose.Schema(
     category: {
       type: String,
       required: [true, 'Service category is required.'],
-      enum: [ServiceCategory.COMMERCIAL, ServiceCategory.RESIDENTIAL, ServiceCategory.OFFER]
     },
     description: {
       type: String,
