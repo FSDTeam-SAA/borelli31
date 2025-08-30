@@ -129,7 +129,7 @@ export const updateAssessmentStatusService = async (id, status) => {
     const err = new Error('Invalid status. Allowed: PENDING, IN_PROGRESS, COMPLETED')
     err.statusCode = 400
     throw err
-  }
+  } 
 
   const doc = await Assessment.findByIdAndUpdate(
     id,
