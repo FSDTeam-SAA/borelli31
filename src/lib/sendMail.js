@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+import { adminMail, adminPass } from '../core/config/config.js';
 
 const sendMail = async ({ to, subject, html }) => {
   try {
@@ -7,13 +8,13 @@ const sendMail = async ({ to, subject, html }) => {
       port: 587,
       secure: false,
       auth: {
-        user: 'cb@borrelliroofing.com',
-        pass: 'add your password here'
+        user: adminMail,
+        pass: adminPass
       }
     });
 
     const mailOptions = {
-      from: 'cb@borrelliroofing.com',
+      from: adminMail,
       to,
       subject,
       html
