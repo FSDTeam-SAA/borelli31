@@ -19,7 +19,7 @@ const AssessmentSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: [ServiceCategory.COMMERCIAL, ServiceCategory.RESIDENTIAL]
+      enum: [ServiceCategory.COMMERCIAL, ServiceCategory.RESIDENTIAL, ServiceCategory.ROOFING]
     },
 
     service: { type: mongoose.Schema.Types.ObjectId, ref: Service.modelName, required: true },
