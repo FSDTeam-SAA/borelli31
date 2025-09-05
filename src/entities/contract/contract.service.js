@@ -9,9 +9,14 @@ const sendMessage = async (payload) => {
   }
   const result = await sendEmailMessage({
     from: email,
+    subject: 'New Contract Inquiry',
     to: emailAddress,
-    subject: 'Contract Inquiry',
-    html: sendMessageTemplate({ email, message })
+    html: sendMessageTemplate({
+      email,
+      subject: 'New Contract Inquiry',
+      phone,
+      message
+    })
   });
   if (!result.success) {
     throw new Error(`Failed to send email: ${result.error}`);
