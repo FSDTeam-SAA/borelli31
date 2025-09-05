@@ -9,7 +9,7 @@ const ServiceSchema = new mongoose.Schema(
     },
     category: {
       type: String,
-      required: [true, 'Service category is required.'],
+      required: [true, 'Service category is required.']
     },
     description: {
       type: String,
@@ -32,7 +32,7 @@ const ServiceSchema = new mongoose.Schema(
 ServiceSchema.index({ category: 1 });
 ServiceSchema.index({ name: 1, category: 1 }, { unique: true });
 
-const Service = mongoose.models.Service || mongoose.model('Service', ServiceSchema);
+
+const Service =
+  mongoose.models.Service || mongoose.model('Service', ServiceSchema);
 export default Service;
-
-
