@@ -1,9 +1,9 @@
 import Assessment from './assessment.model.js';
 import Service from '../service/service.model.js';
 import { createPaginationInfo } from '../../lib/pagination.js';
-import sendEmail from '../../lib/sendEmail.js';
 import { adminMail } from '../../core/config/config.js';
 import sendToMailTemplate from '../../lib/sendToMaliTemplate.js';
+import sendMail from '../../lib/sendMail.js';
 
 export const createAssessmentService = async (payload) => {
   const {
@@ -18,15 +18,6 @@ export const createAssessmentService = async (payload) => {
   const serviceDoc = await Service.findById(serviceId);
   if (!serviceDoc) throw new Error('Service not found');
 
-  // const existing = await Assessment.findOne({
-  //   email,
-  //   service: serviceDoc._id
-  // }).sort({ createdAt: -1 });
-
-  // if (existing) {
-  //   return { doc: existing, existed: true };
-  // }
-
   const doc = await Assessment.create({
     fullName,
     email,
@@ -36,7 +27,7 @@ export const createAssessmentService = async (payload) => {
     category: serviceDoc.category
   });
 
-  await sendEmail({
+  await sendMail({
     to: adminMail,
     subject: `New Assessment Inquiry from ${fullName}`,
     html: sendToMailTemplate({
