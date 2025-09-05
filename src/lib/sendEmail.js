@@ -1,18 +1,17 @@
-import nodemailer from "nodemailer";
+import nodemailer from 'nodemailer';
 import {
   emailHost,
   emailPort,
   emailAddress,
-  emailPass,
-  emailFrom,
-} from "../core/config/config.js"; 
+  emailPass
+} from '../core/config/config.js';
 
 const sendEmail = async ({ to, subject, html }) => {
   try {
     const transporter = nodemailer.createTransport({
       host: emailHost,
       port: emailPort,
-      secure: false,
+      secure: emailPort === 465,
       auth: {
         user: emailAddress,
         pass: emailPass
@@ -20,16 +19,16 @@ const sendEmail = async ({ to, subject, html }) => {
     });
 
     const mailOptions = {
-      from: emailFrom,
+      from: emailAddress,
       to,
       subject,
-      html,
+      html
     };
 
     await transporter.sendMail(mailOptions);
     return { success: true };
   } catch (error) {
-    console.error("Email send error:", error);
+    console.error('Email send error:', error);
     return { success: false, error: error.message };
   }
 };
