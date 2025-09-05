@@ -1,25 +1,19 @@
 import nodemailer from 'nodemailer';
-import {
-  emailHost,
-  emailPort,
-  emailAddress,
-  emailPass
-} from '../core/config/config.js';
 
-const sendEmail = async ({ to, subject, html }) => {
+const sendMail = async ({ to, subject, html }) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: emailHost,
-      port: emailPort,
-      secure: emailPort === 465,
+      host: 'smtp.office365.com',
+      port: 587,
+      secure: false,
       auth: {
-        user: emailAddress,
-        pass: emailPass
+        user: 'cb@borrelliroofing.com',
+        pass: 'add your password here'
       }
     });
 
     const mailOptions = {
-      from: emailAddress,
+      from: 'cb@borrelliroofing.com',
       to,
       subject,
       html
@@ -33,4 +27,4 @@ const sendEmail = async ({ to, subject, html }) => {
   }
 };
 
-export default sendEmail;
+export default sendMail;
