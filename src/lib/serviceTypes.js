@@ -1,7 +1,8 @@
 export const ServiceCategory = Object.freeze({
   COMMERCIAL: 'Commercial',
   RESIDENTIAL: 'Residential',
-  OFFER: 'Offer'
+  OFFER: 'Offer',
+  ROOFING: 'Roofing'
 });
 
 export const COMMERCIAL_SERVICES = Object.freeze([
