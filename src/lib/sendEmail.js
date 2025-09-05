@@ -15,8 +15,8 @@ const sendEmail = async ({ to, subject, html }) => {
       secure: false,
       auth: {
         user: emailAddress,
-        pass: emailPass,
-      },
+        pass: emailPass
+      }
     });
 
     const mailOptions = {
